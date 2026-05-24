@@ -1,0 +1,9 @@
+node_modules
+dist
+screenshots
+apps/*
+!apps/example.config.json
+.env
+.DS_Store
+templates/*custom*.html
+templates/custom_*.meta.json

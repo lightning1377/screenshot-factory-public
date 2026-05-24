@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Screenshot Factory Example Multi Phone Template</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: #101828;
+        color: #ffffff;
+      }
+
+      .stage {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 64px;
+        padding: 112px 84px;
+        background:
+          linear-gradient(135deg, rgba(36, 99, 235, 0.32), transparent 42%),
+          linear-gradient(180deg, #172033 0%, #101828 100%);
+      }
+
+      .eyebrow {
+        font-size: 30px;
+        font-weight: 700;
+        color: #8bd3ff;
+      }
+
+      h1 {
+        max-width: 860px;
+        margin: 22px 0 0;
+        font-size: 74px;
+        line-height: 1.05;
+        letter-spacing: 0;
+      }
+
+      .stack {
+        position: relative;
+        align-self: center;
+        justify-self: center;
+        width: 820px;
+        height: 1220px;
+      }
+
+      .device {
+        position: absolute;
+        width: 520px;
+        height: 930px;
+        padding: 16px;
+        border-radius: 56px;
+        background: #0b1220;
+        box-shadow: 0 36px 84px rgba(0, 0, 0, 0.42);
+      }
+
+      .device.primary {
+        right: 0;
+        top: 0;
+      }
+
+      .device.secondary {
+        left: 0;
+        bottom: 0;
+        transform: scale(0.9);
+        opacity: 0.9;
+      }
+
+      .screen {
+        width: 100%;
+        height: 100%;
+        border-radius: 42px;
+        overflow: hidden;
+        background: #ffffff;
+      }
+
+      .screen img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="stage">
+      <header>
+        <div class="eyebrow">Multi-slot example</div>
+        <h1 id="title">Combine related app screens.</h1>
+      </header>
+
+      <section class="stack">
+        <div class="device secondary">
+          <div class="screen">
+            <img id="secondary" alt="" />
+          </div>
+        </div>
+        <div class="device primary">
+          <div class="screen">
+            <img id="primary" alt="" />
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const title = params.get('title');
+      const fallback = params.get('screenshot');
+      const screenshots = JSON.parse(params.get('screenshots') || '{}');
+
+      if (title) {
+        document.getElementById('title').textContent = title;
+      }
+
+      document.getElementById('primary').src = screenshots.primary || fallback || '';
+      document.getElementById('secondary').src = screenshots.secondary || fallback || '';
+    </script>
+  </body>
+</html>

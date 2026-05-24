@@ -1,0 +1,20 @@
+{
+  "name": "normal",
+  "files": {
+    "phone": "phone.html",
+    "tablet": "tablet.html"
+  },
+  "slots": [
+    {
+      "id": "primary",
+      "label": "Primary Screenshot",
+      "required": true
+    }
+  ],
+  "textSlots": [
+    {
+      "id": "title",
+      "label": "Main Title"
+    }
+  ]
+}

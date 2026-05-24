@@ -1,0 +1,25 @@
+{
+  "name": "example_multi",
+  "files": {
+    "phone": "phone_example_multi.html",
+    "tablet": "tablet_example_multi.html"
+  },
+  "slots": [
+    {
+      "id": "primary",
+      "label": "Primary Screenshot",
+      "required": true
+    },
+    {
+      "id": "secondary",
+      "label": "Secondary Screenshot",
+      "required": true
+    }
+  ],
+  "textSlots": [
+    {
+      "id": "title",
+      "label": "Main Title"
+    }
+  ]
+}

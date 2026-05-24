@@ -1,0 +1,45 @@
+{
+  "id": "example-app",
+  "name": "Example App",
+  "packageName": "com.example.app",
+  "apkPath": "/absolute/path/to/example-app.apk",
+  "uploadKeyPath": "/absolute/path/to/play-store-service-account.json",
+  "scenes": ["home", "details"],
+  "locales": ["en"],
+  "sceneConfigs": [
+    {
+      "templateId": "normal",
+      "slotSceneMap": {
+        "primary": {
+          "scene": "home",
+          "theme": "$current"
+        }
+      },
+      "themes": ["light"],
+      "textSlots": {
+        "title": {
+          "en": "Show your app at its best"
+        }
+      }
+    },
+    {
+      "templateId": "example_multi",
+      "slotSceneMap": {
+        "primary": {
+          "scene": "details",
+          "theme": "$current"
+        },
+        "secondary": {
+          "scene": "home",
+          "theme": "$current"
+        }
+      },
+      "themes": ["light"],
+      "textSlots": {
+        "title": {
+          "en": "Combine related screens"
+        }
+      }
+    }
+  ]
+}

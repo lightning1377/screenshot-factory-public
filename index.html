@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Screenshot Factory Preview</title>
+    <link rel="stylesheet" href="/src/ui/styles.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-title">Screenshot Factory</div>
+        </div>
+        <nav class="nav">
+          <button data-page="landing">Home</button>
+          <button data-page="configs">App Config</button>
+          <button data-page="capture">Capture</button>
+          <button data-page="preview">Preview</button>
+          <button data-page="templates">Templates</button>
+          <button data-page="upload">Upload</button>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <button id="zen-mode-toggle" class="zen-toggle" title="Toggle Zen Mode">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+          </svg>
+        </button>
+        <div id="page-root"></div>
+      </main>
+    </div>
+
+    <script type="module" src="/src/ui/app.ts"></script>
+  </body>
+</html>
