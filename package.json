@@ -12,6 +12,7 @@
     "build": "tsc --project tsconfig.build.json",
     "build:frontend": "tsc --project tsconfig.frontend.json",
     "start": "node dist/index.js",
+    "docs:screenshots": "tsx scripts/generate-readme-screenshots.ts",
     "lint": "eslint . && tsc --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",

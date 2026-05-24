@@ -108,6 +108,18 @@ The UI is the easiest way to work day to day:
 - `Templates`: edit and create local HTML templates.
 - `Upload`: prepare screenshots for Play Store upload and run uploads when configured.
 
+<!-- readme-screenshots:start -->
+### UI Screenshots
+
+| Home | App Config | Capture |
+| --- | --- | --- |
+| ![Home panel](docs/screenshots/home.png) | ![App Config panel](docs/screenshots/app-config.png) | ![Capture panel](docs/screenshots/capture.png) |
+
+| Preview | Templates | Upload |
+| --- | --- | --- |
+| ![Preview panel](docs/screenshots/preview.png) | ![Templates panel](docs/screenshots/templates.png) | ![Upload panel](docs/screenshots/upload.png) |
+<!-- readme-screenshots:end -->
+
 ## App Configs
 
 App configs live in `apps/*.json`. Private configs are ignored by default, while
@@ -323,3 +335,4 @@ request.
 ## License
 
 MIT. See [LICENSE](LICENSE).
+

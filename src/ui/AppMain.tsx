@@ -17,6 +17,17 @@ import { createTemplateStore } from './stores/templateStore';
 import { createUploadStore } from './stores/uploadStore';
 
 import { screenshotFactorySDK } from './sdk/ScreenshotFactorySDK';
+import {
+  DEMO_CONFIG_PATH,
+  createDemoPreviewCards,
+  demoCaptureLogs,
+  demoDevices,
+  demoDiscoveredScreenshots,
+  demoEmulators,
+  demoRenderLogs,
+  demoUploadLogs,
+  isDemoMode,
+} from './demoMode';
 
 // Initialize Stores
 const appStore = createAppStore({ initialApps: [] });
@@ -45,6 +56,8 @@ export function AppMain() {
   // Initial Data Load
   useEffect(() => {
     const loadInitialData = async () => {
+      const demoMode = isDemoMode();
+
       try {
         const appsData = await screenshotFactorySDK.getApps();
         appActions.setAppConfigs(appsData.apps || []);
@@ -54,8 +67,55 @@ export function AppMain() {
         appActions.setTemplates(templateSignals.templates.value, templateSignals.catalog.value);
         previewActions.updateTemplateOptions(templateSignals.templates.value);
 
-        await captureActions.loadDevices();
-        await captureActions.loadEmulators();
+        if (demoMode) {
+          const demoApp =
+            appsData.apps?.find((app) => app.configPath === DEMO_CONFIG_PATH) || appsData.apps?.[0];
+
+          if (demoApp) {
+            const result = await screenshotFactorySDK.readConfig(demoApp.configPath);
+            const config = result.config;
+
+            if (config) {
+              appActions.setCurrentApp(config, demoApp.configPath);
+              configActions.setConfig(config);
+              uploadActions.initOrder(config.uploadOrder || ['home', 'details']);
+              previewActions.updateForConfig(config, demoApp.configPath);
+              previewActions.setAllPreview(
+                createDemoPreviewCards(config, templateSignals.catalog.value),
+              );
+            }
+          }
+
+          if (templateSignals.templates.value.includes('phone.html')) {
+            templateSignals.selectedTemplate.value = 'phone.html';
+            await templateActions.loadTemplateContent('phone.html');
+          } else if (templateSignals.selectedTemplate.value) {
+            await templateActions.loadTemplateContent(templateSignals.selectedTemplate.value);
+          }
+
+          captureSignals.devices.value = demoDevices;
+          captureSignals.emulators.value = demoEmulators;
+          captureSignals.selectedSerial.value = demoDevices[0] || '';
+          captureSignals.selectedEmulator.value = JSON.stringify({
+            id: demoEmulators[0]?.id,
+            type: demoEmulators[0]?.type,
+          });
+          captureSignals.statusMessage.value = 'Demo capture data loaded.';
+          captureSignals.statusTone.value = 'success';
+          captureSignals.logs.value = demoCaptureLogs;
+
+          previewActions.setRenderStatus('Demo render outputs are ready.', 'success');
+          previewSignals.renderLogs.value = demoRenderLogs;
+
+          uploadSignals.discoveredScreenshots.value = demoDiscoveredScreenshots;
+          uploadSignals.connectionValid.value = true;
+          uploadSignals.statusMessage.value = 'Demo screenshots discovered and verified.';
+          uploadSignals.statusTone.value = 'success';
+          uploadSignals.logs.value = demoUploadLogs;
+        } else {
+          await captureActions.loadDevices();
+          await captureActions.loadEmulators();
+        }
       } catch (err) {
         console.error('Failed to load initial data:', err);
       }
