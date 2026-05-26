@@ -17,17 +17,29 @@ store-ready images from reusable HTML templates.
 - Provides both a CLI and a local browser UI for managing configs, capture runs, previews,
   templates, and Play Store upload preparation.
 
-## Why This Exists
+## The Problem & The Solution
 
-Store screenshots are easy to neglect because they sit between engineering, localization, design,
-and release operations. Screenshot Factory keeps that workflow close to the app code and makes it
-repeatable:
+### The Problem
+Preparing app-store screenshots is historically a tedious, manual design chore that developers and release managers dread. For every release:
+1. **Manual Navigation & Device Setup:** Developers must configure multiple physical devices or emulators, manually navigate to specific app screens, set system language, trigger specific mock states, and take screenshots.
+2. **Design Splicing & Translation:** Captured files must be manually imported into design tools (like Figma or Photoshop) to fit device frames, translate text captions, and align layouts.
+3. **Inconsistency & Human Error:** A simple change in an app's UI or copy requires repeating the entire process, leading to misalignment, outdated images, and inconsistent store listings.
 
-1. Keep an app config in `apps/`.
-2. Capture raw screenshots from the app.
-3. Preview templates locally.
-4. Render final store assets.
-5. Optionally prepare or upload the screenshots for Google Play.
+### The Solution
+**Screenshot Factory** automates and unifies the entire screenshot pipeline from app code to store assets.
+* **Deep-Link Navigation:** Instantly routes your running app to specific scenes, seeding locales, data states, and themes dynamically.
+* **Automated Capture:** Programmatically takes raw device captures through ADB and structures them automatically on disk.
+* **HTML/CSS Templating:** Renders raw screens inside reusable, responsive HTML templates containing localized captions, background gradients, and device frames.
+* **Repeatable & Design-Free:** Configured once, the entire asset collection can be regenerated in seconds for every new version of the app.
+
+## Technical Architecture & Highlights
+
+* **Headless Browser Performance:** Under the hood, rendering is performed by **headless Puppeteer**. By loading HTML templates locally using the `file://` protocol, the factory bypasses HTTP/network latency. Screenshots are rendered at exact target store resolutions (e.g., `1080x1920` for phones, `2560x1600` for tablets) in milliseconds.
+* **Smart ADB Screen Stabilization:** To prevent blurred captures during view transitions, the runner uses a signature-based checking loop. It captures consecutive temporary frames on-device and hashes them using ADB `md5sum` (falling back to file metadata if `md5sum` is unavailable). The runner captures the final frame only when the screen signature stabilizes over multiple intervals, optimizing capture speed while guaranteeing crisp visuals.
+* **Concurrency & Job Management:** Built as an asynchronous, non-blocking service, capture and render operations run as background tasks. The dev server manages these tasks via maps and equips them with `AbortController` handles. This allows users to start, monitor logs in real-time, or safely cancel tasks via either the CLI or UI without blocking the API thread.
+* **CI/CD Pipeline Integration:** Because Screenshot Factory includes a fully-featured headless CLI, it integrates natively into automated build environments (such as GitHub Actions, Jenkins, or fastlane):
+  * **APK Lifecycle Automation:** The runner can automatically boot target emulators, install freshly compiled APKs, clear cached storage for a clean state, run deep links, and capture assets.
+  * **Play Store Deployment:** Integrates with the Google Play Developer API, utilizing service-account JSON keys to validate, pack, and directly upload metadata to active store listings.
 
 ## Requirements
 
